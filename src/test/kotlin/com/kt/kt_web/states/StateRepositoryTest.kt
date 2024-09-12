@@ -1,11 +1,11 @@
 package com.kt.kt_web.states
 
+import com.kt.kt_web.configuration.TestcontainersConfiguration
 import com.kt.kt_web.entities.model.State
 import com.kt.kt_web.entities.model.StateOption
 import com.kt.kt_web.entities.model.Task
 import com.kt.kt_web.repositories.StateRepository
 import com.kt.kt_web.repositories.TaskRepository
-import com.kt.kt_web.tasks.postgres
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
@@ -14,15 +14,16 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.jdbc.Sql
-import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDateTime
 
 @Testcontainers
-@Sql(scripts = ["classpath:/sql/init-data.sql"])
 @DataJpaTest
+@Sql(scripts = ["classpath:/sql/init-data.sql"])
+@Import(TestcontainersConfiguration::class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class StateRepositoryTest {
     @Autowired
@@ -31,16 +32,8 @@ class StateRepositoryTest {
     @Autowired
     private lateinit var taskRepository: TaskRepository
 
-    companion object {
-        @Container
-        @ServiceConnection
-        private val postgres = postgres("postgres:latest") {
-            withDatabaseName("tasks")
-            withUsername("root")
-            withPassword("root")
-            //withInitScript("sql/schema.sql")
-        }
-    }
+    @Autowired
+    private lateinit var postgres: PostgreSQLContainer<Nothing>
 
     @Nested
     @DisplayName("Connection to Containers Tests")

@@ -5,7 +5,9 @@ import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
 import org.springframework.context.annotation.Bean
 import org.testcontainers.containers.KafkaContainer
+import org.testcontainers.containers.Network
 import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.containers.ToxiproxyContainer
 import org.testcontainers.utility.DockerImageName
 
 @TestConfiguration
@@ -23,4 +25,12 @@ class TestcontainersConfiguration {
     fun kafka(): KafkaContainer = KafkaContainer(
         DockerImageName.parse("confluentinc/cp-kafka:7.6.1")
     )
+
+    @Bean
+    fun toxiProxyNetwork(): Network = Network.newNetwork()
+
+    @Bean
+    fun toxiproxy(): ToxiproxyContainer = ToxiproxyContainer("ghcr.io/shopify/toxiproxy:2.5.0")
+        .withNetwork(toxiProxyNetwork())
+        .dependsOn(postgres())
 }

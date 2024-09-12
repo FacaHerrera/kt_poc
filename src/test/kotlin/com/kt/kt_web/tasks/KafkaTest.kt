@@ -1,5 +1,6 @@
 package com.kt.kt_web.tasks
 
+import com.kt.kt_web.configuration.TestcontainersConfiguration
 import com.kt.kt_web.entities.model.Task
 import java.util.concurrent.TimeUnit.SECONDS
 import com.kt.kt_web.repositories.TaskRepository
@@ -11,13 +12,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.springframework.kafka.core.KafkaTemplate
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
-import org.testcontainers.containers.KafkaContainer
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
-import org.testcontainers.utility.DockerImageName
 import shared.TicketDTO
 import java.time.Duration
 import java.time.LocalDateTime
@@ -26,32 +23,9 @@ import kotlin.test.assertNotNull
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(TestcontainersConfiguration::class)
 @Testcontainers
 class KafkaTest {
-    companion object {
-        @Container
-        private val postgres = postgres("postgres:16.0") {
-            withDatabaseName("tasks")
-            withUsername("root")
-            withPassword("root")
-            //withInitScript("sql/schema.sql")
-        }
-
-        @Container
-        private val kafka: KafkaContainer = KafkaContainer(
-            DockerImageName.parse("confluentinc/cp-kafka:7.6.1")
-        )
-
-        @JvmStatic
-        @DynamicPropertySource
-        fun overrideProperties(registry: DynamicPropertyRegistry) {
-            registry.add("spring.datasource.url", postgres::getJdbcUrl)
-            registry.add("spring.datasource.password", postgres::getPassword)
-            registry.add("spring.datasource.username", postgres::getUsername)
-
-            registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers)
-        }
-    }
 
     @Autowired
     private lateinit var kafkaTemplate: KafkaTemplate<String, TicketDTO>

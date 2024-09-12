@@ -1,5 +1,6 @@
 package com.kt.kt_web.tasks
 
+import com.kt.kt_web.configuration.TestcontainersConfiguration
 import com.kt.kt_web.entities.model.Task
 import com.kt.kt_web.repositories.TaskRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -9,30 +10,23 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection
+import org.springframework.context.annotation.Import
 import org.springframework.test.context.jdbc.Sql
-import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.junit.jupiter.Testcontainers
 
 @Testcontainers
 @Sql(scripts = ["classpath:/sql/init-data.sql"])
 @DataJpaTest
+@Import(TestcontainersConfiguration::class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class TaskRepositoryTest {
 
     @Autowired
     private lateinit var taskRepository: TaskRepository
 
-    companion object {
-        @Container
-        @ServiceConnection
-        private val postgres = postgres("postgres:latest") {
-            withDatabaseName("tasks")
-            withUsername("root")
-            withPassword("root")
-            //withInitScript("sql/schema.sql")
-        }
-    }
+    @Autowired
+    private lateinit var postgres: PostgreSQLContainer<Nothing>
 
     @Nested
     @DisplayName("Connection to Containers Tests")

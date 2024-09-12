@@ -28,10 +28,7 @@ import org.springframework.context.annotation.Import
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
 import org.testcontainers.containers.PostgreSQLContainer
-import org.testcontainers.junit.jupiter.Container
 import org.testcontainers.junit.jupiter.Testcontainers
 import java.time.LocalDateTime
 
@@ -55,23 +52,6 @@ class TaskIntegrationTest {
 
     @Autowired
     private lateinit var stateRepository: StateRepository
-
-    /*companion object {
-        @Container
-        private val postgres = postgres("postgres:16.0") {
-            withDatabaseName("tasks")
-            withUsername("root")
-            withPassword("root")
-        }
-
-        @JvmStatic
-        @DynamicPropertySource
-        fun datasourceConfig(registry: DynamicPropertyRegistry) {
-            registry.add("spring.datasource.url", postgres::getJdbcUrl)
-            registry.add("spring.datasource.password", postgres::getPassword)
-            registry.add("spring.datasource.username", postgres::getUsername)
-        }
-    }*/
 
     @BeforeEach
     fun setup() {
