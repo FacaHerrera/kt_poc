@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "PostgreSQL Server",
+      "Group": "Servers",
+      "Host": "postgres-server",
+      "Port": 5432,
+      "MaintenanceDB": "tasks",
+      "Username": "root",
+      "Password": "root"
+    }
+  }
+}
