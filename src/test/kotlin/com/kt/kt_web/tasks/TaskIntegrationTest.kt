@@ -2,6 +2,7 @@ package com.kt.kt_web.tasks
 
 import com.kt.kt_web.configuration.TestcontainersConfiguration
 import com.kt.kt_web.entities.dto.StateDTO
+import com.kt.kt_web.entities.dto.TaskDTO
 import com.kt.kt_web.entities.model.State
 import com.kt.kt_web.entities.model.StateOption
 import com.kt.kt_web.entities.model.Task
@@ -140,23 +141,66 @@ class TaskIntegrationTest {
     //@TestInstance(Lifecycle.PER_CLASS)
     inner class PostTaskTests {
         @Test
+        fun `should save a new task with a state`() {
+            val task = Task(
+                "New Task",
+                "This is a new Task"
+            )
+
+            val state = StateDTO(null, LocalDateTime.now(), null, StateOption.TO_DO.name)
+
+            val taskDTO = task.toDTO()
+            taskDTO.stateRecord = mutableListOf(state)
+
+            val postResponse = given(requestSpecification)
+                .contentType(ContentType.JSON)
+                .body(taskDTO)
+                .`when`()
+                    .post(baseUrl)
+                .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract()
+                    .response()
+
+            val id = postResponse.jsonPath().getString("id")
+
+            given(requestSpecification)
+                .contentType(ContentType.JSON)
+                .queryParam("title", task.title)
+                .`when`()
+                    .get("$baseUrl/title")
+                .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("title", equalTo(task.title))
+
+            given(requestSpecification)
+                .contentType(ContentType.JSON)
+                .`when`()
+                    .get("$baseUrl/$id/states")
+                .then()
+                    .statusCode(HttpStatus.OK.value())
+                    .body("[0].state", equalTo(StateOption.TO_DO.name))
+        }
+
+        @Test
         fun `should save a new task`() {
             val task = Task(
                 "New Task",
-                "This is a new Task",
-                /*mutableListOf()*/
+                "This is a new Task"
             )
 
-            val state = State(LocalDateTime.now(), null, StateOption.TO_DO, task)
-            //task.addState(state)
-
-            given(requestSpecification)
+            val postResponse = given(requestSpecification)
                 .contentType(ContentType.JSON)
                 .body(task.toDTO())
                 .`when`()
                     .post(baseUrl)
                 .then()
                     .statusCode(HttpStatus.OK.value())
+                    .extract()
+                    .response()
+
+            val id = postResponse.jsonPath().getString("id")
+
 
             given(requestSpecification)
                 .contentType(ContentType.JSON)
