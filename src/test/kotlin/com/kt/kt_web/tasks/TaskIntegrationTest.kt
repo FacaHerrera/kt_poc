@@ -199,9 +199,6 @@ class TaskIntegrationTest {
                     .extract()
                     .response()
 
-            val id = postResponse.jsonPath().getString("id")
-
-
             given(requestSpecification)
                 .contentType(ContentType.JSON)
                 .queryParam("title", task.title)
