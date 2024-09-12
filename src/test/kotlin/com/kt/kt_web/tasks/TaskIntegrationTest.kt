@@ -189,7 +189,7 @@ class TaskIntegrationTest {
                 "This is a new Task"
             )
 
-            val postResponse = given(requestSpecification)
+            given(requestSpecification)
                 .contentType(ContentType.JSON)
                 .body(task.toDTO())
                 .`when`()
