@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException
 import org.hibernate.service.spi.ServiceException
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import shared.TicketDTO
 import java.time.LocalDateTime
@@ -162,4 +163,11 @@ class TaskService(
             throw ServiceException("Error processing ticket", e)
         }
     }
+
+    @Transactional(timeout = 5, propagation = Propagation.REQUIRES_NEW)
+    fun saveWithTimeout(task: Task) = taskRepository.save(task)
+
+    @Transactional(timeout = 5, propagation = Propagation.REQUIRES_NEW)
+    fun findAllWithTimeout(): List<Task> = taskRepository.findAll()
+
 }

@@ -2,7 +2,6 @@ package com.kt.kt_web.tasks
 
 import com.kt.kt_web.configuration.TestcontainersConfiguration
 import com.kt.kt_web.entities.dto.StateDTO
-import com.kt.kt_web.entities.dto.TaskDTO
 import com.kt.kt_web.entities.model.State
 import com.kt.kt_web.entities.model.StateOption
 import com.kt.kt_web.entities.model.Task
@@ -38,8 +37,8 @@ import java.time.LocalDateTime
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Testcontainers
 @Import(TestcontainersConfiguration::class)
-class TaskIntegrationTest {
-    val logger: Logger = LoggerFactory.getLogger(TaskIntegrationTest::class.java)
+class TaskIntegrationTestEntity {
+    val logger: Logger = LoggerFactory.getLogger(TaskIntegrationTestEntity::class.java)
     val baseUrl = "/api/v1/tasks"
 
     @LocalServerPort
@@ -80,7 +79,7 @@ class TaskIntegrationTest {
 
     @Nested
     @DisplayName("Connection & Health")
-    inner class ConnectionTest {
+    inner class ConnectionTestEntity {
         @Test
         fun `should establish connection with postgres container`() {
             Assertions.assertThat(postgres.isCreated).isTrue()

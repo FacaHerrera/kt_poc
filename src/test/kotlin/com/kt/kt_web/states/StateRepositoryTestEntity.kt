@@ -25,7 +25,7 @@ import java.time.LocalDateTime
 @Sql(scripts = ["classpath:/sql/init-data.sql"])
 @Import(TestcontainersConfiguration::class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class StateRepositoryTest {
+class StateRepositoryTestEntity {
     @Autowired
     private lateinit var stateRepository: StateRepository
 
@@ -37,7 +37,7 @@ class StateRepositoryTest {
 
     @Nested
     @DisplayName("Connection to Containers Tests")
-    inner class ConnectionTest {
+    inner class ConnectionTestEntity {
         @Test
         fun `should establish connection with postgres container`() {
             Assertions.assertThat(postgres.isCreated).isTrue()

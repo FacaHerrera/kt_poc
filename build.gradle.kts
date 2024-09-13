@@ -24,9 +24,9 @@ dependencies {
 
 	/// Data
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.flywaydb:flyway-core")
+
 
 	/// Web
 	implementation("org.springframework.boot:spring-boot-starter-web")
@@ -46,7 +46,6 @@ dependencies {
 	/// Logging
 	implementation("org.slf4j:slf4j-api:2.0.9")
 	implementation("ch.qos.logback:logback-classic:1.4.12")
-
 
 	/// Actuator
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -68,7 +67,6 @@ dependencies {
 	testImplementation("org.testcontainers:kafka")
 	testImplementation("org.awaitility:awaitility")
 	testImplementation("org.testcontainers:toxiproxy:1.20.1")
-
 
 	/// Spring Boot
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

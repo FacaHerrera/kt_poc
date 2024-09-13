@@ -30,7 +30,7 @@ class TaskRepositoryTest {
 
     @Nested
     @DisplayName("Connection to Containers Tests")
-    inner class ConnectionTest {
+    inner class ConnectionTestEntity {
         @Test
         fun `should establish connection with postgres container`() {
             assertThat(postgres.isCreated).isTrue()
